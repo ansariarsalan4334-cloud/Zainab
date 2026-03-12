@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aesthetic Café</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #111;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease;
+            overflow: hidden;
+        }
+
+        section.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 1;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #b56576;
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #b56576;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 250px;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:hover {
+            border-color: #b56576;
+            box-shadow: 0 0 15px #b56576;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #b56576;
+            white-space: nowrap;
+            animation: typing 3s steps(30, end), blink .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        /* Flip cards for menu */
+        .menu-grid {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            width: 150px;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        .card-front {
+            background: #b56576;
+        }
+
+        .card-back {
+            background: #444;
+            transform: rotateY(180deg);
+        }
+
+        /* Blurred background images */
+        #login::before,
+        #signup::before,
+        #home::before,
+        #menu::before,
+        #contact::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.6);
+            z-index: -1;
+        }
+
+        #login::before {
+            background-image: url('https://source.unsplash.com/1600x900/?coffee,beans');
+        }
+
+        #signup::before {
+            background-image: url('https://source.unsplash.com/1600x900/?coffee,cup');
+        }
+
+        #home::before {
+            background-image: url('https://source.unsplash.com/1600x900/?cafe,interior');
+        }
+
+        #menu::before {
+            background-image: url('https://source.unsplash.com/1600x900/?coffee,food');
+        }
+
+        #contact::before {
+            background-image: url('https://source.unsplash.com/1600x900/?restaurant,table');
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #222;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px #b56576;
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login -->
+    <section id="login" class="active">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email"><br>
+        <input type="password" id="loginPassword" placeholder="Password"><br>
+        <button class="btn" onclick="login()">Login</button>
+        <p>New user? <span class="btn" onclick="showPage('signup')">Signup</span></p>
+    </section>
+
+    <!-- Signup -->
+    <section id="signup">
+        <h2>Signup</h2>
+        <input type="email" id="signupEmail" placeholder="Email"><br>
+        <input type="password" id="signupPassword" placeholder="Password"><br>
+        <button class="btn" onclick="signup()">Signup</button>
+    </section>
+
+    <!-- Home -->
+    <section id="home">
+        <h2 class="typewriter">Sip, Relax, Repeat...</h2>
+        <p>Welcome to Aesthetic Café</p>
+        <button class="btn" onclick="showPage('menu')">Explore Menu →</button>
+    </section>
+
+    <!-- Menu -->
+    <section id="menu">
+        <h2>Our Menu</h2>
+        <div class="menu-grid">
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">☕ Cappuccino</div>
+                    <div class="card-back">₹150</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">🍵 Matcha Latte</div>
+                    <div class="card-back">₹180</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">🥐 Croissant</div>
+                    <div class="card-back">₹120</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn" onclick="showPage('contact')">Next → Contact</button>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <h2>Contact & Reservation</h2>
+        <input type="text" placeholder="Your Name"><br>
+        <input type="email" placeholder="Your Email"><br>
+        <input type="date"><br>
+        <button class="btn" onclick="showModal()">Book Table</button>
+        <button class="btn" onclick="showPage('login')">← Back to Login</button>
+    </section>
+
+    <!-- Reservation Success Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Reservation Confirmed!</h2>
+            <p>Your table has been booked successfully at Aesthetic Café.</p>
+            <button class="btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll("section").forEach(sec => {
+                sec.classList.remove("active");
+            });
+            document.getElementById(pageId).classList.add("active");
+        }
+        function signup() {
+            let email = document.getElementById("signupEmail").value;
+            let pass = document.getElementById("signupPassword").value;
+            localStorage.setItem(email, pass);
+            alert("Signup successful! Please login.");
+            showPage('login');
+        }
+        function login() {
+            let email = document.getElementById("loginEmail").value;
+            let pass = document.getElementById("loginPassword").value;
+            let stored = localStorage.getItem(email);
+            if (stored === pass) {
+                alert("Login successful!");
+                showPage('home');
+            } else {
+                alert("Invalid credentials!");
+            }
+        }
+        function showModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
